@@ -1,0 +1,259 @@
+import Util from '@services/util';
+import './text-input.scss';
+
+/** @constant {object} DEFAULT_CKE_CONFIG Config mirroring html widget in semantics.json */
+const DEFAULT_CKE_CONFIG = {
+  removePlugins: ['MathType'],
+  updateSourceElementOnDestroy: true,
+  startupFocus: false,
+  toolbar: [
+    'bold', 'italic', 'underline', 'strikeThrough', 'Subscript', 'Superscript', '|',
+    'RemoveFormat', '|',
+    'alignment', 'bulletedList', 'numberedList', '|',
+    'link', '|',
+    'horizontalLine', 'heading', 'fontSize', 'fontColor'
+  ],
+  link: {
+    defaultProtocol: 'https://',
+  },
+  heading: {
+    options: [
+      { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+      { model: 'formatted', view: 'pre', title: 'Formatted' },
+      { model: 'address', view: 'address', title: 'Address' },
+      { model: 'normal', view: 'div', title: 'Normal (DIV)' }
+    ]
+  },
+  alignment: {
+    options: ['left', 'center', 'right']
+  }
+};
+
+export default class TextInput {
+  /**
+   * @class
+   * @param {object} [params] Parameters.
+   * @param {object} [callbacks] Callbacks.
+   */
+  constructor(params = {}, callbacks = {}) {
+    this.params = Util.extend({
+      userCanEdit: true,
+      language: 'en',
+    }, params);
+
+    this.callbacks = Util.extend({
+      onResized: () => {}
+    }, callbacks);
+
+    this.canBeHidden = true;
+
+    this.dom = document.createElement('div');
+    this.dom.classList.add('h5p-editable-text-container');
+
+    if (this.params.backgroundColor) {
+      // set background color as custom css property on this.textarea
+      this.dom.style.setProperty('--h5p-editable-text-background-color', this.params.backgroundColor);
+    }
+
+    this.textarea = document.createElement('div');
+    this.textarea.classList.add('h5p-editable-text-textarea');
+    this.textarea.setAttribute('tabindex', 0);
+    this.textarea.setAttribute('placeholder', this.params.placeholder);
+    if (this.params.text) {
+      this.textarea.innerHTML = this.params.text;
+    }
+
+    if (this.params.userCanEdit) {
+      this.textarea.addEventListener('focus', (event) => {
+        // Prevent outside click listener from firing when click caused focus
+        this.canBeHidden = false;
+        window.requestAnimationFrame(() => {
+          this.canBeHidden = true;
+        });
+
+        this.initCKEditor();
+        this.showCKEditor();
+      });
+
+      this.textarea.addEventListener('click', (event) => {
+        this.initCKEditor();
+        this.showCKEditor();
+      });
+
+      if (this.params.ckeditorIsOpenPermanently) {
+        this.initCKEditor({ startupFocus: false });
+        this.showCKEditor();
+        this.textarea.classList.add('opacity-zero');
+      }
+      else {
+        document.addEventListener('click', (event) => {
+          if (!this.canBeHidden) {
+            return;
+          }
+
+          const wasClickedOutside = event.target.closest('.h5p-editable-text') === null;
+          if (!wasClickedOutside) {
+            return;
+          }
+
+          this.hideCKEditor();
+        });
+      }
+    }
+
+    this.textarea.id = this.params.id;
+
+    this.dom.append(this.textarea);
+  }
+
+  getDOM() {
+    return this.dom;
+  }
+
+  /**
+   * Initialize CKEditor.
+   * @param {object} [config] Configuration.
+   */
+  initCKEditor(config = {}) {
+    if (this.ckeditor) {
+      return;
+    }
+
+    /*
+     * Workaround for H5PCLI that for some reason adds the patch version to the path
+     * @see https://h5ptechnology.atlassian.net/browse/HFP-4240
+     */
+    for (let uberName in H5PIntegration.libraryDirectories) {
+      const path = H5PIntegration.libraryDirectories[uberName];
+      let [ main, version ] = path.split('-');
+      version = version.split('.').slice(0, 2).join('.');
+      H5PIntegration.libraryDirectories[uberName] = `${main}-${version}`;
+    }
+
+    config = Util.extend({ title: this.params.a11y.textInputTitle }, config);
+    this.ckeditor = this.buildCKEditor(config);
+    this.textarea.innerHTML = this.getHTML();
+  }
+
+  showCKEditor() {
+    if (this.isShowingCKEditor) {
+      return;
+    }
+
+    if (!this.ckeditor) {
+      this.initCKEditor();
+    }
+
+    this.ckeditor.create();
+    this.isShowingCKEditor = true;
+
+    this.callOnceCKEditorVisible(this.dom, () => {
+      this.textarea.classList.remove('opacity-zero');
+
+      const ckeditorContentDOM = this.dom.querySelector('.h5p-ckeditor .ck-content');
+      ckeditorContentDOM?.addEventListener('keydown', () => {
+        this.updateTextAreaFromCKEditor();
+        this.callbacks.onResized();
+      });
+
+      ckeditorContentDOM.addEventListener('focus', () => {
+        // Prevent outside click listener from firing when focus was just given
+        this.canBeHidden = false;
+        window.requestAnimationFrame(() => {
+          this.canBeHidden = true;
+        });
+      });
+
+      const toolbar = this.dom.querySelector('.h5p-ckeditor .ck-toolbar');
+      toolbar?.addEventListener('click', () => {
+        this.updateTextAreaFromCKEditor();
+        this.callbacks.onResized();
+      });
+
+      this.callbacks.onResized();
+    });
+  }
+
+  hideCKEditor() {
+    if (!this.ckeditor) {
+      return;
+    }
+
+    this.ckeditor.destroy();
+    delete this.ckeditor;
+    this.isShowingCKEditor = false;
+  }
+
+  /**
+   * Build H5P.CKEditor instance (!== CKEditor instance).
+   * @param {object} [config] Configuration.
+   * @returns {H5P.CKEditor} H5P.CKEditor instance.
+   */
+  buildCKEditor(config = {}) {
+    return new H5P.CKEditor(
+      this.params.id,
+      this.params.language,
+      H5P.jQuery(this.dom),
+      this.params.text ?? '',
+      Util.extend(DEFAULT_CKE_CONFIG, config)
+    );
+  }
+
+  /**
+   * Get HTML.
+   * @returns {string} HTML.
+   */
+  getHTML() {
+    return this.ckeditor?.getData() ?? this.textarea.innerHTML ?? '';
+  }
+
+  /**
+   * Get plain text.
+   * @returns {string} Plain text.
+   */
+  getText() {
+    return Util.stripHTML(this.getHTML()) ?? this.textarea.innerText ?? '';
+  }
+
+  /**
+   * Reset.
+   */
+  reset() {
+    this.params.text = '';
+    hideCKEditor();
+
+    this.textarea.innerHTML = '';
+  }
+
+  /**
+   * Call callback function once CKEditor is visible.
+   * @param {HTMLElement} dom DOM element to wait on.
+   * @param {function} callback Function to call once CKEditor is visible.
+   */
+  callOnceCKEditorVisible(dom, callback) {
+    if (typeof dom !== 'object' || typeof callback !== 'function') {
+      return; // Invalid arguments
+    }
+
+    const observer = new MutationObserver(() => {
+      const ckeditorDOM = dom.querySelector('.h5p-ckeditor');
+
+      if (!ckeditorDOM) {
+        return;
+      }
+
+      observer.disconnect();
+
+      callback();
+    });
+
+    observer.observe(dom, { attributes: true, childList: true, subtree: true });
+  }
+
+  /**
+   * Update textarea with content from CKEditor.
+   */
+  updateTextAreaFromCKEditor() {
+    this.textarea.innerHTML = this.getHTML();
+  }
+}

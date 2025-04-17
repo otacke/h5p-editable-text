@@ -1,0 +1,42 @@
+{
+  "title": "Editable Text",
+  "description": "Content type that offers an editable HTML text field.",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 0,
+  "runnable": 1,
+  "author": "Oliver Tacke",
+  "license": "MIT",
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 27
+  },
+  "machineName": "H5P.EditableText",
+  "embedTypes": [
+    "iframe"
+  ],
+  "preloadedJs": [
+    {
+      "path": "dist/h5p-editable-text.js"
+    }
+  ],
+  "preloadedCss": [
+    {
+      "path": "dist/h5p-editable-text.css"
+    }
+  ],
+  "preloadedDependencies": [
+    {
+      "machineName": "H5P.CKEditor",
+      "majorVersion": 1,
+      "minorVersion": 0
+    }
+  ],
+  "editorDependencies": [
+    {
+      "machineName": "H5PEditor.ColorSelector",
+      "majorVersion": 1,
+      "minorVersion": 3
+    }
+  ]
+}

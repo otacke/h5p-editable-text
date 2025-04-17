@@ -1,0 +1,92 @@
+[
+  {
+    "name": "text",
+    "type": "text",
+    "label": "Prefilled text",
+    "widget": "html",
+    "optional": true,
+    "tags": [
+      "sub",
+      "sup",
+      "strong",
+      "em",
+      "p",
+      "code",
+      "u",
+      "del",
+      "a",
+      "ul",
+      "ol",
+      "hr",
+      "pre",
+      "code"
+    ],
+    "font": {
+      "color": true,
+      "size": true
+    }
+  },
+  {
+    "name": "placeholder",
+    "type": "text",
+    "label": "Placeholder text",
+    "optional": true
+  },
+  {
+    "name": "backgroundColor",
+    "type": "text",
+    "label": "Background color",
+    "description": "Choose a color to use as the background of the text.",
+    "default": "rgb(255, 255, 255)",
+    "widget": "colorSelector",
+    "spectrum": {
+      "showInput": true,
+      "showInitial": true,
+      "preferredFormat": "rgb",
+      "showAlpha": true
+    },
+    "optional": true
+  },
+  {
+    "name": "behaviour",
+    "type": "group",
+    "importance": "low",
+    "label": "Behavioural settings",
+    "fields": [
+      {
+        "name": "userCanEdit",
+        "type": "boolean",
+        "label": "User can edit",
+        "default": true,
+        "widget": "none"
+      },
+      {
+        "name": "dummy",
+        "type": "boolean",
+        "label": "Dummy",
+        "widget": "none"
+      }
+    ]
+  },
+  {
+    "name": "a11y",
+    "type": "group",
+    "label": "Accessibility texts",
+    "common": true,
+    "fields": [
+      {
+        "name": "text",
+        "type": "text",
+        "label": "Text",
+        "default": "Text"
+      },
+      {
+        "name": "dummy",
+        "type": "text",
+        "label": "Dummy",
+        "default": "Dummy",
+        "widget": "none"
+      }
+    ]
+  }
+]

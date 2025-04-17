@@ -1,0 +1,41 @@
+.h5p-editable-text-container {
+  background-color: var(--h5p-editable-text-background-color);
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+  resize: none;
+  word-wrap: break-word;
+
+  .h5p-editable-text-textarea {
+    box-sizing: border-box;
+    cursor: text;
+    font-family: inherit;
+    font-size: inherit;
+    max-width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding-inline: 0.5rem;
+
+    &>:first-child {
+      margin-top: var(--ck-spacing-large, calc(0.6em * 1.5));
+    }
+
+    &>:last-child {
+      margin-bottom: var(--ck-spacing-large, calc(0.6em * 1.5));
+    }
+
+    &:empty:before {
+      color: #888;
+      content: attr(placeholder);
+      display: block; /* For Firefox */
+    }
+
+    &.opacity-zero {
+      opacity: 0;
+    }
+  }
+
+  .ck.ck-editor__main>.ck-editor__editable {
+    background: transparent;
+  }
+}
