@@ -71,17 +71,17 @@ export default class TextInput {
           this.canBeHidden = true;
         });
 
-        this.initCKEditor();
+        this.initCKEditor( { text: this.textarea.innerHTML } );
         this.showCKEditor();
       });
 
       this.textarea.addEventListener('click', (event) => {
-        this.initCKEditor();
+        this.initCKEditor( { text: this.textarea.innerHTML } );
         this.showCKEditor();
       });
 
       if (this.params.ckeditorIsOpenPermanently) {
-        this.initCKEditor({ startupFocus: false });
+        this.initCKEditor({ text: this.textarea.innerHTML, startupFocus: false });
         this.showCKEditor();
         this.textarea.classList.add('opacity-zero');
       }
@@ -131,8 +131,9 @@ export default class TextInput {
     }
 
     config = Util.extend({ title: this.params.a11y.textInputTitle }, config);
+
     this.ckeditor = this.buildCKEditor(config);
-    this.textarea.innerHTML = this.getHTML();
+    this.updateTextAreaFromCKEditor();
   }
 
   showCKEditor() {
@@ -141,7 +142,7 @@ export default class TextInput {
     }
 
     if (!this.ckeditor) {
-      this.initCKEditor();
+      this.initCKEditor( { text: this.textarea.innerHTML });
     }
 
     this.ckeditor.create();
@@ -179,6 +180,8 @@ export default class TextInput {
       return;
     }
 
+    this.updateTextAreaFromCKEditor();
+
     this.ckeditor.destroy();
     delete this.ckeditor;
     this.isShowingCKEditor = false;
@@ -194,7 +197,7 @@ export default class TextInput {
       this.params.id,
       this.params.language,
       H5P.jQuery(this.dom),
-      this.params.text ?? '',
+      config.text ?? this.params.text ?? '',
       Util.extend(DEFAULT_CKE_CONFIG, config)
     );
   }
