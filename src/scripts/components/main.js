@@ -78,9 +78,25 @@ export default class Main {
   }
 
   /**
+   * Get user response in plain text.
+   * @returns {object} Current state of the text input.
+   */
+  getCurrentState() {
+    return {
+      text: this.textInput.getHTML(),
+      backgroundColor: this.textInput.getBackgroundColor()
+    };
+  }
+
+  /**
    * Reset the field to its initial state.
    */
   reset() {
     this.textInput.reset();
+  }
+
+  updateParams(params = {}) {
+    this.textInput.setHTML(params.text);
+    this.textInput.setBackgroundColor(params.backgroundColor);
   }
 }

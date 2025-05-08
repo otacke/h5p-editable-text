@@ -1,12 +1,12 @@
 import Util from '@services/util.js';
 import Dictionary from '@services/dictionary.js';
 import Main from '@components/main.js';
-import '@styles/h5p-editable-text.scss';
+import semantics from '@root/semantics.json';
 import { decode } from 'he';
+import '@styles/h5p-editable-text.scss';
 
 /** @constant {string} Default description */
 const DEFAULT_DESCRIPTION = 'HTML Text Input Field';
-
 
 export default class EditableText extends H5P.EventDispatcher {
   /**
@@ -45,11 +45,11 @@ export default class EditableText extends H5P.EventDispatcher {
     this.main = new Main(
       {
         language: language,
-        text: this. previousState.main || this.params.text,
+        text: this.previousState.main?.text || this.params.text,
         placeholder: Util.stripHTML(decode(this.params.placeholder)),
         userCanEdit: this.params.behaviour.userCanEdit,
         ckeditorIsOpenPermanently: this.params.behaviour.ckeditorIsOpenPermanently,
-        backgroundColor: this.params.backgroundColor,
+        backgroundColor: this.previousState.main?.backgroundColor || this.params.backgroundColor,
         l10n: this.params.l10n,
         a11y: this.params.a11y,
       },
@@ -97,7 +97,7 @@ export default class EditableText extends H5P.EventDispatcher {
    */
   getCurrentState() {
     return {
-      main: this.main.getResponse()
+      main: this.main.getCurrentState()
     };
   }
 
@@ -111,5 +111,35 @@ export default class EditableText extends H5P.EventDispatcher {
 
   getSummary() {
     return `${this.dictionary.get('a11y.text')}: ${this.main.getResponse()}`;
+  }
+
+  openEditorDialog(params = {}) {
+    if ( typeof this.params.passEditorDialog !== 'function') {
+      return;
+    }
+
+    this.params.passEditorDialog(
+      {
+        title: this.getTitle(),
+        fields: semantics.filter((field) => field.name === 'text' || field.name === 'backgroundColor'),
+        values: this.getCurrentState().main,
+      },
+      {
+        setValues: (newParams) => {
+          this.updateParams(newParams);
+          if (params.activeElement) {
+            params.activeElement.focus();
+          }
+        }
+      }
+    );
+  }
+
+  updateParams(params) {
+    params.forEach((param) => {
+      this.params[param.name] = param.value;
+    });
+
+    this.main.updateParams(this.params);
   }
 }

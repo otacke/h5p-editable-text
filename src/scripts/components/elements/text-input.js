@@ -210,6 +210,32 @@ export default class TextInput {
     return this.ckeditor?.getData() ?? this.textarea.innerHTML ?? '';
   }
 
+  setHTML(html) {
+    if (typeof html !== 'string' || !html) {
+      return;
+    }
+
+    this.params.text = html;
+    this.textarea.innerHTML = html;
+  }
+
+  setBackgroundColor(color) {
+    if (typeof color !== 'string' || !color) {
+      return;
+    }
+
+    this.params.backgroundColor = color;
+    this.dom.style.setProperty('--h5p-editable-text-background-color', color);
+  }
+
+  /**
+   * Get background color.
+   * @returns {string} Background color.
+   */
+  getBackgroundColor() {
+    return this.params.backgroundColor;
+  }
+
   /**
    * Get plain text.
    * @returns {string} Plain text.
@@ -223,7 +249,7 @@ export default class TextInput {
    */
   reset() {
     this.params.text = '';
-    hideCKEditor();
+    this.hideCKEditor();
 
     this.textarea.innerHTML = '';
   }
