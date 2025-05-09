@@ -51,6 +51,7 @@
     "name": "behaviour",
     "type": "group",
     "importance": "low",
+    "widget": "none",
     "label": "Behavioural settings",
     "fields": [
       {
