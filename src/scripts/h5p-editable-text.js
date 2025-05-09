@@ -1,7 +1,7 @@
 import Util from '@services/util.js';
+import H5PUtil from '@services/utils-h5p.js';
 import Dictionary from '@services/dictionary.js';
 import Main from '@components/main.js';
-import semantics from '@root/semantics.json';
 import { decode } from 'he';
 import '@styles/h5p-editable-text.scss';
 
@@ -38,13 +38,12 @@ export default class EditableText extends H5P.EventDispatcher {
     this.dictionary.fill({ l10n: this.params.l10n, a11y: this.params.a11y });
 
     this.previousState = extras?.previousState || {};
-
-    const language = extras?.metadata?.language || extras?.metadata?.defaultLanguage || 'en';
+    this.language = extras?.metadata?.language || extras?.metadata?.defaultLanguage || 'en';
 
     // Initialize main component
     this.main = new Main(
       {
-        language: language,
+        language: this.language,
         text: this.previousState.main?.text || this.params.text,
         placeholder: Util.stripHTML(decode(this.params.placeholder)),
         userCanEdit: this.params.behaviour.userCanEdit,
@@ -113,15 +112,17 @@ export default class EditableText extends H5P.EventDispatcher {
     return `${this.dictionary.get('a11y.text')}: ${this.main.getResponse()}`;
   }
 
-  openEditorDialog(params = {}) {
+  async openEditorDialog(params = {}) {
     if ( typeof this.params.passEditorDialog !== 'function') {
       return;
     }
 
+    this.translatedSemantics = this.translatedSemantics ?? await H5PUtil.getTranslatedSemantics(this.language);
+
     this.params.passEditorDialog(
       {
         title: this.getTitle(),
-        fields: semantics.filter((field) => field.name === 'text' || field.name === 'backgroundColor'),
+        fields: this.translatedSemantics.filter((field) => field.name === 'text' || field.name === 'backgroundColor'),
         values: this.getCurrentState().main,
       },
       {
