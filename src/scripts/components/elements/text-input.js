@@ -130,8 +130,6 @@ export default class TextInput {
       H5PIntegration.libraryDirectories[uberName] = `${main}-${version}`;
     }
 
-    config = Util.extend({ title: this.params.a11y.textInputTitle }, config);
-
     this.ckeditor = this.buildCKEditor(config);
     this.updateTextAreaFromCKEditor();
   }
@@ -141,11 +139,33 @@ export default class TextInput {
       return;
     }
 
+    const config = { title: this.params.a11y.textInputTitle, text: this.textarea.innerHTML };
+
     if (!this.ckeditor) {
-      this.initCKEditor( { text: this.textarea.innerHTML });
+      this.initCKEditor(config);
     }
 
-    this.ckeditor.create();
+    if (window.ClassicEditor) {
+      window.ClassicEditor
+        .create(this.textarea, config)
+        .then((editor) => {
+          editor.ui.element.classList.add('h5p-ckeditor');
+          editor.ui.element.style.height = '100%';
+          editor.ui.element.style.width = '100%';
+
+          editor.editing.view.focus();
+
+          this.ckeditor = editor;
+          this.ckeditor.setData(config.text ?? this.params.text ?? '');
+        })
+        .catch((error) => {
+          throw new Error(`Error loading CKEditor of target ${error}`);
+        });
+    }
+    else {
+      this.ckeditor.create();
+    }
+
     this.isShowingCKEditor = true;
 
     this.callOnceCKEditorVisible(this.dom, () => {
@@ -193,13 +213,15 @@ export default class TextInput {
    * @returns {H5P.CKEditor} H5P.CKEditor instance.
    */
   buildCKEditor(config = {}) {
-    return new H5P.CKEditor(
+    const editor = new H5P.CKEditor(
       this.params.id,
       this.params.language,
       H5P.jQuery(this.dom),
       config.text ?? this.params.text ?? '',
       Util.extend(DEFAULT_CKE_CONFIG, config)
     );
+
+    return editor;
   }
 
   /**
@@ -283,6 +305,15 @@ export default class TextInput {
    * Update textarea with content from CKEditor.
    */
   updateTextAreaFromCKEditor() {
-    this.textarea.innerHTML = this.getHTML();
+    const editorContent = this.getHTML();
+
+    if (window.ClassicEditor) {
+      window.requestAnimationFrame(() => {
+        this.textarea.innerHTML = editorContent;
+      });
+    }
+    else {
+      this.textarea.innerHTML = editorContent;
+    }
   }
 }
