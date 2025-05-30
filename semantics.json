@@ -51,15 +51,13 @@
     "name": "behaviour",
     "type": "group",
     "importance": "low",
-    "widget": "none",
     "label": "Behavioural settings",
     "fields": [
       {
         "name": "userCanEdit",
         "type": "boolean",
         "label": "User can edit",
-        "default": true,
-        "widget": "none"
+        "default": true
       },
       {
         "name": "dummy",

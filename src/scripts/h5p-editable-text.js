@@ -30,6 +30,8 @@ export default class EditableText extends H5P.EventDispatcher {
       a11y: {},
     }, params);
 
+    this.callbacks = {};
+
     this.contentId = contentId;
     this.extras = extras;
 
@@ -112,22 +114,31 @@ export default class EditableText extends H5P.EventDispatcher {
     return `${this.dictionary.get('a11y.text')}: ${this.main.getResponse()}`;
   }
 
+  setPassEditorDialogCallback(callback) {
+    this.callbacks.passEditorDialog = callback;
+  }
+
   async openEditorDialog(params = {}) {
-    if ( typeof this.params.passEditorDialog !== 'function') {
+    if ( typeof this.callbacks.passEditorDialog !== 'function') {
       return;
     }
 
     this.translatedSemantics = this.translatedSemantics ?? await H5PUtil.getTranslatedSemantics(this.language);
 
-    this.params.passEditorDialog(
+    const userParams = this.getCurrentState().main;
+    const mergedParams = { ...this.params, ...userParams };
+
+    this.callbacks.passEditorDialog(
       {
+        versionedName: this.libraryInfo.versionedName,
+        params: mergedParams,
         title: this.getTitle(),
         fields: this.translatedSemantics.filter((field) => field.name === 'text' || field.name === 'backgroundColor'),
         values: this.getCurrentState().main,
       },
       {
-        setValues: (newParams) => {
-          this.updateParams(newParams);
+        setValues: (newParams, isEditor) => {
+          this.updateParams(newParams, isEditor);
           if (params.activeElement) {
             params.activeElement.focus();
           }
