@@ -139,12 +139,16 @@ export default class TextInput {
       return;
     }
 
-    const config = { title: this.params.a11y.textInputTitle, text: this.textarea.innerHTML };
+    const config = Util.extend(
+      DEFAULT_CKE_CONFIG,
+      { title: this.params.a11y.textInputTitle, text: this.textarea.innerHTML }
+    );
 
     if (!this.ckeditor) {
       this.initCKEditor(config);
     }
 
+    // Workaround, or else CKEditor will not be initialized properly on concecutive uses
     if (window.ClassicEditor) {
       window.ClassicEditor
         .create(this.textarea, config)
