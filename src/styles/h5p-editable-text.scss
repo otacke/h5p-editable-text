@@ -37,4 +37,27 @@ html {
 
   height: 100%;
   max-width: 100%;
+
+  /* Give height if run standalone */
+  &.h5p-standalone {
+    display: flex;
+    flex-direction: column;
+    min-height: 6rem;
+
+    .h5p-editable-text-main {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+
+      .h5p-editable-text-container {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+
+        .h5p-editable-text-textarea {
+          flex: 1
+        }
+      }
+    }
+  }
 }
