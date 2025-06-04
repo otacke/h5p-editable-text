@@ -1,4 +1,5 @@
 import Util from '@services/util';
+import { getAccessibleContrastColor, roundColorString } from '@services/utils-color.js';
 import './text-input.scss';
 
 /** @constant {object} DEFAULT_CKE_CONFIG Config mirroring html widget in semantics.json */
@@ -50,10 +51,7 @@ export default class TextInput {
     this.dom = document.createElement('div');
     this.dom.classList.add('h5p-editable-text-container');
 
-    if (this.params.backgroundColor) {
-      // set background color as custom css property on this.textarea
-      this.dom.style.setProperty('--h5p-editable-text-background-color', this.params.backgroundColor);
-    }
+    this.setBackgroundColor(this.params.backgroundColor);
 
     this.textarea = document.createElement('div');
     this.textarea.classList.add('h5p-editable-text-textarea');
@@ -273,6 +271,8 @@ export default class TextInput {
 
     this.params.backgroundColor = color;
     this.dom.style.setProperty('--h5p-editable-text-background-color', color);
+    const contrastColor = getAccessibleContrastColor(roundColorString(color));
+    this.dom.style.setProperty('--h5p-editable-text-placeholder-color', contrastColor);
   }
 
   /**
