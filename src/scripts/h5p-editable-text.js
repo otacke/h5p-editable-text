@@ -57,7 +57,10 @@ export default class EditableText extends H5P.EventDispatcher {
       {
         onResized: () => {
           this.trigger('resize');
-        }
+        },
+        onChanged: (text) => {
+          this.trigger('changed', { text: text });
+        },
       }
     );
   }

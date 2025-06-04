@@ -43,7 +43,8 @@ export default class TextInput {
     }, params);
 
     this.callbacks = Util.extend({
-      onResized: () => {}
+      onResized: () => {},
+      onChanged: () => {},
     }, callbacks);
 
     this.canBeHidden = true;
@@ -175,7 +176,9 @@ export default class TextInput {
 
       const ckeditorContentDOM = this.dom.querySelector('.h5p-ckeditor .ck-content');
       ckeditorContentDOM?.addEventListener('keydown', () => {
-        this.updateTextAreaFromCKEditor();
+        window.requestAnimationFrame(() => {
+          this.updateTextAreaFromCKEditor();
+        });
         this.callbacks.onResized();
       });
 
@@ -340,5 +343,7 @@ export default class TextInput {
     else {
       this.textarea.innerHTML = editorContent;
     }
+
+    this.callbacks.onChanged(editorContent);
   }
 }

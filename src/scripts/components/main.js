@@ -17,7 +17,8 @@ export default class Main {
 
     this.callbacks = Util.extend({
       onXAPI: () => {},
-      onResized: () => {}
+      onResized: () => {},
+      onChanged: () => {}
     }, callbacks);
 
     this.dom = document.createElement('div');
@@ -55,6 +56,9 @@ export default class Main {
       {
         onResized: () => {
           this.callbacks.onResized();
+        },
+        onChanged: (text) => {
+          this.callbacks.onChanged(text);
         }
       }
     );
