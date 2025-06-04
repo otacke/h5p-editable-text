@@ -236,8 +236,12 @@ export default class TextInput {
     return this.ckeditor?.getData() ?? this.textarea.innerHTML ?? '';
   }
 
+  /**
+   * Set HTML.
+   * @param {string} html HTML to set.
+   */
   setHTML(html) {
-    if (typeof html !== 'string' || !html) {
+    if (typeof html !== 'string') {
       return;
     }
 
@@ -245,6 +249,23 @@ export default class TextInput {
     this.textarea.innerHTML = html;
   }
 
+  /**
+   * Set placeholder text.
+   * @param {string} placeholder Placeholder text.
+   */
+  setPlaceholder(placeholder) {
+    if (typeof placeholder !== 'string') {
+      return;
+    }
+
+    this.params.placeholder = placeholder;
+    this.textarea.setAttribute('placeholder', placeholder);
+  }
+
+  /**
+   * Set background color.
+   * @param {string} color Background color.
+   */
   setBackgroundColor(color) {
     if (typeof color !== 'string' || !color) {
       return;

@@ -97,6 +97,7 @@ export default class Main {
 
   updateParams(params = {}) {
     this.textInput.setHTML(params.text);
+    this.textInput.setPlaceholder(params.placeholder);
     this.textInput.setBackgroundColor(params.backgroundColor);
   }
 }

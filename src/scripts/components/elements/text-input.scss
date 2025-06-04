@@ -25,9 +25,10 @@
     }
 
     &:empty:before {
-      color: #888;
+      color: var(--h5p-editable-text-placeholder-color, #888);
       content: attr(placeholder);
       display: block; /* For Firefox */
+      padding-top: var(--ck-spacing-large, calc(0.6em * 1.5));
     }
 
     &.opacity-zero {
