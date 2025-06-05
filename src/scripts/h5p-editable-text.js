@@ -51,6 +51,7 @@ export default class EditableText extends H5P.EventDispatcher {
         userCanEdit: this.params.behaviour.userCanEdit,
         ckeditorIsOpenPermanently: this.params.behaviour.ckeditorIsOpenPermanently,
         backgroundColor: this.previousState.main?.backgroundColor || this.params.backgroundColor,
+        isRoot: this.isRoot(),
         l10n: this.params.l10n,
         a11y: this.params.a11y,
       },

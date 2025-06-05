@@ -7,20 +7,13 @@ const DEFAULT_CKE_CONFIG = {
   removePlugins: ['MathType'],
   updateSourceElementOnDestroy: true,
   startupFocus: false,
-  toolbar: [
-    'bold', 'italic', 'underline', 'strikeThrough', 'Subscript', 'Superscript', '|',
-    'RemoveFormat', '|',
-    'alignment', 'bulletedList', 'numberedList', '|',
-    'link', '|',
-    'horizontalLine', 'heading', 'fontSize', 'fontColor'
-  ],
   link: {
     defaultProtocol: 'https://',
   },
   heading: {
     options: [
+      { model: 'formatted', view: 'pre', title: 'Formatted', class: 'ck-heading_formatted' },
       { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-      { model: 'formatted', view: 'pre', title: 'Formatted' }
     ]
   },
   fontSize: {
@@ -49,6 +42,23 @@ const DEFAULT_CKE_CONFIG = {
   }
 };
 
+/** @constant {Array} DEFAULT_CKE_CONFIG_TOOLBAR_FULL Full toolbar configuration. */
+const DEFAULT_CKE_CONFIG_TOOLBAR_FULL = [
+  'bold', 'italic', 'underline', 'strikeThrough', 'Subscript', 'Superscript', '|',
+  'RemoveFormat', '|',
+  'alignment', 'bulletedList', 'numberedList', '|',
+  'link', '|',
+  'horizontalLine', 'heading', 'fontSize', 'fontColor'
+];
+
+/** @constant {Array} DEFAULT_CKE_CONFIG_TOOLBAR_REDUCED Reduced toolbar configuration. */
+const DEFAULT_CKE_CONFIG_TOOLBAR_REDUCED = [
+  'bold', 'italic', 'underline', 'strikeThrough', 'Subscript', 'Superscript', '|',
+  'RemoveFormat', '|',
+  'alignment', 'bulletedList', 'numberedList', '|',
+  'link'
+];
+
 export default class TextInput {
   /**
    * @class
@@ -67,6 +77,14 @@ export default class TextInput {
     }, callbacks);
 
     this.canBeHidden = true;
+    this.config = DEFAULT_CKE_CONFIG;
+
+    if (this.params.isRoot) {
+      this.config.toolbar = DEFAULT_CKE_CONFIG_TOOLBAR_FULL;
+    }
+    else {
+      this.config.toolbar = DEFAULT_CKE_CONFIG_TOOLBAR_REDUCED;
+    }
 
     this.dom = document.createElement('div');
     this.dom.classList.add('h5p-editable-text-container');
@@ -158,7 +176,7 @@ export default class TextInput {
     }
 
     const config = Util.extend(
-      DEFAULT_CKE_CONFIG,
+      this.config,
       { title: this.params.a11y.textInputTitle, text: this.textarea.innerHTML }
     );
 
@@ -174,6 +192,15 @@ export default class TextInput {
           editor.ui.element.classList.add('h5p-ckeditor');
           editor.ui.element.style.height = '100%';
           editor.ui.element.style.width = '100%';
+
+          // Readjust toolbar's grouped item dropdown panel,
+          // since it can overflow the parent iframe element by using default positioning
+          const dropdownPanel = editor.ui.view.toolbar._behavior.groupedItemsDropdown;
+          dropdownPanel.panelPosition = 'auto';
+
+          // Disable sticky toolbar, since it has problem within iframes
+          editor.ui.view.stickyPanel.unbind('isActive');
+          editor.ui.view.stickyPanel.isActive = false;
 
           editor.editing.view.focus();
 
@@ -242,7 +269,7 @@ export default class TextInput {
       this.params.language,
       H5P.jQuery(this.dom),
       config.text ?? this.params.text ?? '',
-      Util.extend(DEFAULT_CKE_CONFIG, config)
+      Util.extend(this.config, config)
     );
 
     return editor;

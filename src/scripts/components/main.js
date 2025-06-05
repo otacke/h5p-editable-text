@@ -49,6 +49,7 @@ export default class Main {
         placeholder: this.params.placeholder,
         ckeditorIsOpenPermanently: this.params.ckeditorIsOpenPermanently,
         backgroundColor: this.params.backgroundColor,
+        isRoot: this.params.isRoot,
         a11y: {
           textInputTitle: this.params.a11y.textInputTitle
         }
