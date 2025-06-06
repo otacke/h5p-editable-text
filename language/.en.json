@@ -1,0 +1,38 @@
+{
+  "semantics": [
+    {
+      "label": "Text"
+    },
+    {
+      "label": "Placeholder text"
+    },
+    {
+      "label": "Background color",
+      "description": "Choose a color to use as the background of the text."
+    },
+    {
+      "label": "Behavioural settings",
+      "fields": [
+        {
+          "label": "User can edit"
+        },
+        {
+          "label": "Dummy"
+        }
+      ]
+    },
+    {
+      "label": "Accessibility texts",
+      "fields": [
+        {
+          "label": "Text",
+          "default": "Text"
+        },
+        {
+          "label": "Dummy",
+          "default": "Dummy"
+        }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   {
     "name": "text",
     "type": "text",
-    "label": "Prefilled text",
+    "label": "Text",
     "widget": "html",
     "optional": true,
     "tags": [

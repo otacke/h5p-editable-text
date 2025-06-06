@@ -1,0 +1,38 @@
+{
+  "semantics": [
+    {
+      "label": "Text"
+    },
+    {
+      "label": "Platzhaltertext"
+    },
+    {
+      "label": "Hintergrundfarbe",
+      "description": "Wähle eine Farbe für den Texthintergrund aus."
+    },
+    {
+      "label": "Verhaltenseinstellungen",
+      "fields": [
+        {
+          "label": "Nutzende können bearbeiten"
+        },
+        {
+          "label": "Dummy"
+        }
+      ]
+    },
+    {
+      "label": "Barrierefreiheitstexte",
+      "fields": [
+        {
+          "label": "Text",
+          "default": "Text"
+        },
+        {
+          "label": "Dummy",
+          "default": "Dummy"
+        }
+      ]
+    }
+  ]
+}
