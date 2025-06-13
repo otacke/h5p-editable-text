@@ -344,6 +344,7 @@ export default class TextInput {
    * Reset.
    */
   reset() {
+    this.wasEdited = false;
     this.params.text = '';
     this.hideCKEditor();
 
@@ -380,6 +381,15 @@ export default class TextInput {
    */
   updateTextAreaFromCKEditor() {
     const editorContent = this.getHTML();
+
+    if (this.textarea.innerHTML === editorContent) {
+      return; // No change
+    }
+
+    if (!this.wasEdited) {
+      this.wasEdited = true;
+      this.callbacks.onEdited();
+    }
 
     if (window.ClassicEditor) {
       window.requestAnimationFrame(() => {

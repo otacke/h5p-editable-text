@@ -62,6 +62,9 @@ export default class EditableText extends H5P.EventDispatcher {
         onChanged: (text) => {
           this.trigger('changed', { text: text });
         },
+        onEdited: () => {
+          this.trigger('edited');
+        }
       }
     );
   }

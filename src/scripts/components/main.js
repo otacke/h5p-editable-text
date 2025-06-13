@@ -10,15 +10,14 @@ export default class Main {
    * @class
    * @param {object} [params] Parameters.
    * @param {object} [callbacks] Callbacks.
-   * @param {object} [callbacks.onXAPI] Callback when user progressed.
    */
   constructor(params = {}, callbacks = {}) {
     this.params = Util.extend({}, params);
 
     this.callbacks = Util.extend({
-      onXAPI: () => {},
       onResized: () => {},
-      onChanged: () => {}
+      onChanged: () => {},
+      onEdited: () => {}
     }, callbacks);
 
     this.dom = document.createElement('div');
@@ -60,6 +59,9 @@ export default class Main {
         },
         onChanged: (text) => {
           this.callbacks.onChanged(text);
+        },
+        onEdited: () => {
+          this.callbacks.onEdited();
         }
       }
     );
