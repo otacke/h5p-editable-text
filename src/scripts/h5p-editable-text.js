@@ -126,7 +126,7 @@ export default class EditableText extends H5P.EventDispatcher {
 
     this.translatedSemantics = this.translatedSemantics ?? await H5PUtil.getTranslatedSemantics(this.language);
 
-    const userParams = this.getCurrentState().main;
+    const userParams = this.getCurrentState()?.main || {};
     const mergedParams = { ...this.params, ...userParams };
 
     this.callbacks.passEditorDialog(
