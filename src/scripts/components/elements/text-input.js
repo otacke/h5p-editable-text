@@ -76,6 +76,8 @@ export default class TextInput {
       onChanged: () => {},
     }, callbacks);
 
+    this.text = this.params.text;
+
     this.canBeHidden = true;
     this.config = DEFAULT_CKE_CONFIG;
 
@@ -95,8 +97,8 @@ export default class TextInput {
     this.textarea.classList.add('h5p-editable-text-textarea');
     this.textarea.setAttribute('tabindex', 0);
     this.textarea.setAttribute('placeholder', this.params.placeholder);
-    if (this.params.text) {
-      this.textarea.innerHTML = this.params.text;
+    if (this.text) {
+      this.textarea.innerHTML = this.text;
     }
 
     if (this.params.userCanEdit) {
@@ -205,7 +207,7 @@ export default class TextInput {
           editor.editing.view.focus();
 
           this.ckeditor = editor;
-          this.ckeditor.setData(config.text ?? this.params.text ?? '');
+          this.ckeditor.setData(config.text ?? this.text ?? '');
         })
         .catch((error) => {
           throw new Error(`Error loading CKEditor of target ${error}`);
@@ -268,7 +270,7 @@ export default class TextInput {
       this.params.id,
       this.params.language,
       H5P.jQuery(this.dom),
-      config.text ?? this.params.text ?? '',
+      config.text ?? this.text ?? '',
       Util.extend(this.config, config)
     );
 
@@ -292,7 +294,7 @@ export default class TextInput {
       return;
     }
 
-    this.params.text = html;
+    this.text = html;
     this.textarea.innerHTML = html;
   }
 
@@ -345,10 +347,12 @@ export default class TextInput {
    */
   reset() {
     this.wasEdited = false;
-    this.params.text = '';
+    this.text = this.params.text;
     this.hideCKEditor();
 
-    this.textarea.innerHTML = '';
+    if (this.text) {
+      this.textarea.innerHTML = this.text;
+    }
   }
 
   /**
