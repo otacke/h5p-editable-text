@@ -58,6 +58,7 @@ export default class Main {
           this.callbacks.onResized();
         },
         onChanged: (text) => {
+          this.wasAnswerGiven = true;
           this.callbacks.onChanged(text);
         },
         onEdited: () => {

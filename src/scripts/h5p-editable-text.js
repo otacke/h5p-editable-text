@@ -2,9 +2,9 @@ import Util from '@services/util.js';
 import H5PUtil from '@services/utils-h5p.js';
 import Dictionary from '@services/dictionary.js';
 import Main from '@components/main.js';
+import QuestionTypeContract from '@mixins/question-type-contract.js';
 import { decode } from 'he';
 import '@styles/h5p-editable-text.scss';
-
 /** @constant {string} Default description */
 const DEFAULT_DESCRIPTION = 'HTML Text Input Field';
 
@@ -17,6 +17,8 @@ export default class EditableText extends H5P.EventDispatcher {
    */
   constructor(params, contentId, extras = {}) {
     super();
+
+    Util.addMixins(EditableText, [QuestionTypeContract]);
 
     // Sanitize parameters
     this.params = Util.extend({
@@ -34,6 +36,8 @@ export default class EditableText extends H5P.EventDispatcher {
 
     this.contentId = contentId;
     this.extras = extras;
+
+    this.wasAnswerGiven = false;
 
     // Fill dictionary
     this.dictionary = new Dictionary();
@@ -60,6 +64,7 @@ export default class EditableText extends H5P.EventDispatcher {
           this.trigger('resize');
         },
         onChanged: (text) => {
+          this.wasAnswerGiven = true;
           this.trigger('changed', { text: text });
         },
         onEdited: () => {
@@ -96,17 +101,6 @@ export default class EditableText extends H5P.EventDispatcher {
    */
   getDescription() {
     return DEFAULT_DESCRIPTION;
-  }
-
-  /**
-   * Get current state.
-   * @returns {object} Current state to be retrieved later.
-   * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-7}
-   */
-  getCurrentState() {
-    return {
-      main: this.main.getCurrentState()
-    };
   }
 
   /**
