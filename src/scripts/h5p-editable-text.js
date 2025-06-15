@@ -135,7 +135,7 @@ export default class EditableText extends H5P.EventDispatcher {
         params: mergedParams,
         title: this.getTitle(),
         fields: this.translatedSemantics.filter((field) => field.name === 'text' || field.name === 'backgroundColor'),
-        values: this.getCurrentState().main,
+        values: this.main.getCurrentState(),
       },
       {
         setValues: (newParams, isEditor) => {
