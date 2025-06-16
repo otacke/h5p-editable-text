@@ -95,14 +95,27 @@ export default class EditableText extends H5P.EventDispatcher {
     this.dom.style.setProperty('--scaled-font-size', `${sizePx}px`);
   }
 
+  /**
+   * Get a summary of the component.
+   * @returns {string} Summary of component.
+   */
   getSummary() {
     return `${this.dictionary.get('a11y.text')}: ${this.main.getResponse()}`;
   }
 
+  /**
+   * Set the callback for passing editor dialog.
+   * @param {function} callback The callback function for editor dialog.
+   */
   setPassEditorDialogCallback(callback) {
     this.callbacks.passEditorDialog = callback;
   }
 
+  /**
+   * Open the editor dialog.
+   * @param {object} [params] Parameters for opening the editor dialog.
+   * @param {HTMLElement} [params.activeElement] Element to focus after dialog closes.
+   */
   async openEditorDialog(params = {}) {
     if ( typeof this.callbacks.passEditorDialog !== 'function') {
       return;
@@ -132,6 +145,12 @@ export default class EditableText extends H5P.EventDispatcher {
     );
   }
 
+  /**
+   * Update component parameters and refresh the view.
+   * @param {object[]} params Parameter objects to update.
+   * @param {string} params[].name Name of the parameter to update.
+   * @param {*} params[].value New value for the parameter.
+   */
   updateParams(params) {
     params.forEach((param) => {
       this.params[param.name] = param.value;

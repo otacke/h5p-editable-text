@@ -103,6 +103,13 @@ export default class Main {
     this.textInput.reset();
   }
 
+  /**
+   * Update text input parameters.
+   * @param {object} params Parameters
+   * @param {string} params.text Text to set in the input field.
+   * @param {string} params.placeholder Placeholder text for the input field.
+   * @param {string} params.backgroundColor Background color for the input field.
+   */
   updateParams(params = {}) {
     this.textInput.setHTML(params.text);
     this.textInput.setPlaceholder(params.placeholder);
