@@ -3,10 +3,12 @@ import H5PUtil from '@services/utils-h5p.js';
 import Dictionary from '@services/dictionary.js';
 import Main from '@components/main.js';
 import QuestionTypeContract from '@mixins/question-type-contract.js';
+import XAPI from '@mixins/xapi.js';
 import { decode } from 'he';
 import '@styles/h5p-editable-text.scss';
-/** @constant {string} Default description */
-const DEFAULT_DESCRIPTION = 'HTML Text Input Field';
+
+/** @constant {string} DEFAULT_LANGUAGE_TAG Default language tag used if not specified in metadata. */
+const DEFAULT_LANGUAGE_TAG = 'en';
 
 export default class EditableText extends H5P.EventDispatcher {
   /**
@@ -18,7 +20,7 @@ export default class EditableText extends H5P.EventDispatcher {
   constructor(params, contentId, extras = {}) {
     super();
 
-    Util.addMixins(EditableText, [QuestionTypeContract]);
+    Util.addMixins(EditableText, [QuestionTypeContract, XAPI]);
 
     // Sanitize parameters
     this.params = Util.extend({
@@ -44,7 +46,8 @@ export default class EditableText extends H5P.EventDispatcher {
     this.dictionary.fill({ l10n: this.params.l10n, a11y: this.params.a11y });
 
     this.previousState = extras?.previousState || {};
-    this.language = extras?.metadata?.language || extras?.metadata?.defaultLanguage || 'en';
+    this.language = extras?.metadata?.language || extras?.metadata?.defaultLanguage || DEFAULT_LANGUAGE_TAG;
+    this.languageTag = Util.formatLanguageCode(this.language);
 
     // Initialize main component
     this.main = new Main(
@@ -82,25 +85,6 @@ export default class EditableText extends H5P.EventDispatcher {
     this.dom = $wrapper.get(0);
     this.dom.classList.add('h5p-editable-text');
     this.dom.append(this.main.getDOM());
-  }
-
-  /**
-   * Get task title.
-   * @returns {string} Title.
-   */
-  getTitle() {
-    // H5P Core function: createTitle
-    return H5P.createTitle(
-      this.extras?.metadata?.title || DEFAULT_DESCRIPTION
-    );
-  }
-
-  /**
-   * Get description.
-   * @returns {string} Description.
-   */
-  getDescription() {
-    return DEFAULT_DESCRIPTION;
   }
 
   /**

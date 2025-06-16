@@ -22,6 +22,19 @@ export default class QuestionTypeContract {
   }
 
   /**
+   * Get xAPI data.
+   * @returns {object} XAPI statement.
+   * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-6}
+   */
+  getXAPIData() {
+    const xAPIEvent = this.createXAPIEvent('completed');
+
+    return {
+      statement: xAPIEvent.data.statement
+    };
+  }
+
+  /**
    * Get current state.
    * @returns {object} Current state to be retrieved later.
    * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-7}
