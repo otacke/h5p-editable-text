@@ -296,6 +296,16 @@ export default class TextInput {
 
     this.text = html;
     this.textarea.innerHTML = html;
+
+    // Quirky way to update CKEditor content as well
+    if (this.ckeditor) {
+      this.hideCKEditor();
+      this.initCKEditor({ text: html });
+
+      if (this.isShowingCKEditor) {
+        this.showCKEditor();
+      }
+    }
   }
 
   /**
