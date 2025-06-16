@@ -2,7 +2,7 @@
   "title": "Editable Text",
   "description": "Content type that offers an editable HTML text field.",
   "majorVersion": 1,
-  "minorVersion": 0,
+  "minorVersion": 1,
   "patchVersion": 0,
   "runnable": 1,
   "author": "Oliver Tacke",
