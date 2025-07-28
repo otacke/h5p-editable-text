@@ -60,4 +60,9 @@ html {
       }
     }
   }
+
+  .ck.ck-dropdown .ck-dropdown__panel.ck-dropdown__panel_se {
+    left: unset;
+    right: 0;
+  }
 }
