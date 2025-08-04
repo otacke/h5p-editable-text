@@ -65,4 +65,9 @@ html {
     left: unset;
     right: 0;
   }
+
+  .ck.ck-toolbar>.ck-toolbar__items>:not(.ck-toolbar__line-break) {
+    margin-bottom: 0;
+    margin-top: 0;
+  }
 }
