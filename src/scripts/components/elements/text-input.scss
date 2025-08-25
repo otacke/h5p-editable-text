@@ -17,12 +17,17 @@
     overflow-y: auto;
     padding-inline: 0.5rem;
 
+    &>p {
+      line-height: 1.25em;
+      margin: 0;
+    }
+
     &>:first-child {
-      margin-top: var(--ck-spacing-large, calc(0.6em * 1.5));
+      margin-top: var(--ck-spacing-small, calc(0.6em * 0.5));
     }
 
     &>:last-child {
-      margin-bottom: var(--ck-spacing-large, calc(0.6em * 1.5));
+      margin-bottom: var(--ck-spacing-small, calc(0.6em * 0.5));
     }
 
     &:empty:before {
@@ -82,6 +87,19 @@
       border: initial;
       border-radius: initial;
       padding: 0;
+    }
+
+    .ck-content p {
+      line-height: 1.25em;
+      margin: 0;
+    }
+
+    .ck.ck-editor__editable_inline>:first-child {
+      margin-top: var(--ck-spacing-small);
+    }
+
+    .ck.ck-editor__editable_inline>:last-child {
+      margin-bottom: var(--ck-spacing-small);
     }
   }
 
