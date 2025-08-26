@@ -83,8 +83,7 @@
         "name": "dummy",
         "type": "text",
         "label": "Dummy",
-        "default": "Dummy",
-        "widget": "none"
+        "default": "Dummy"
       }
     ]
   }

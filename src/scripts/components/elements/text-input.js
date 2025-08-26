@@ -69,6 +69,7 @@ export default class TextInput {
     this.params = Util.extend({
       userCanEdit: true,
       language: 'en',
+      title: 'Text'
     }, params);
 
     this.callbacks = Util.extend({
