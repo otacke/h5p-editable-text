@@ -169,6 +169,14 @@ export default class TextInput {
       H5PIntegration.libraryDirectories[uberName] = `${main}-${version}`;
     }
 
+    /*
+     * Workaround for Lumi
+     */
+    if (H5PIntegration.urlLibraries === 'undefined/h5p/libraries') {
+      H5PIntegration.urlLibraries = '/h5p/libraries';
+    }
+
+
     this.ckeditor = this.buildCKEditor(config);
     this.updateTextAreaFromCKEditor();
   }
