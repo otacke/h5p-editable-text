@@ -2,6 +2,9 @@ import Util from '@services/util';
 import { getAccessibleContrastColor, roundColorString } from '@services/utils-color.js';
 import './text-input.scss';
 
+/** @constant {number} MINOR_VERSION_INDEX Minor version index. */
+const MINOR_VERSION_INDEX = 2;
+
 /** @constant {object} DEFAULT_CKE_CONFIG Config mirroring defautlt html widget in semantics.json. */
 const DEFAULT_CKE_CONFIG = {
   removePlugins: ['MathType'],
@@ -14,7 +17,7 @@ const DEFAULT_CKE_CONFIG = {
     options: [
       { model: 'formatted', view: 'pre', title: 'Formatted', class: 'ck-heading_formatted' },
       { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-    ]
+    ],
   },
   fontSize: {
     options: [
@@ -34,12 +37,12 @@ const DEFAULT_CKE_CONFIG = {
       { title: '175%', model: '1.75em' },
       { title: '225%', model: '2.25em' },
       { title: '300%', model: '3em' },
-      { title: '450%', model: '4.5em' }
-    ]
+      { title: '450%', model: '4.5em' },
+    ],
   },
   alignment: {
-    options: ['left', 'center', 'right']
-  }
+    options: ['left', 'center', 'right'],
+  },
 };
 
 /** @constant {Array} DEFAULT_CKE_CONFIG_TOOLBAR_FULL Full toolbar configuration. */
@@ -48,7 +51,7 @@ const DEFAULT_CKE_CONFIG_TOOLBAR_FULL = [
   'RemoveFormat', '|',
   'alignment', 'bulletedList', 'numberedList', '|',
   'link', '|',
-  'horizontalLine', 'heading', 'fontSize', 'fontColor'
+  'horizontalLine', 'heading', 'fontSize', 'fontColor',
 ];
 
 /** @constant {Array} DEFAULT_CKE_CONFIG_TOOLBAR_REDUCED Reduced toolbar configuration. */
@@ -56,7 +59,7 @@ const DEFAULT_CKE_CONFIG_TOOLBAR_REDUCED = [
   'bold', 'italic', 'underline', 'strikeThrough', 'Subscript', 'Superscript', '|',
   'RemoveFormat', '|',
   'alignment', 'bulletedList', 'numberedList', '|',
-  'link'
+  'link',
 ];
 
 export default class TextInput {
@@ -69,7 +72,7 @@ export default class TextInput {
     this.params = Util.extend({
       userCanEdit: true,
       language: 'en',
-      title: 'Text'
+      title: 'Text',
     }, params);
 
     this.callbacks = Util.extend({
@@ -165,7 +168,7 @@ export default class TextInput {
     for (let uberName in H5PIntegration.libraryDirectories) {
       const path = H5PIntegration.libraryDirectories[uberName];
       let [ main, version ] = path.split('-');
-      version = version.split('.').slice(0, 2).join('.');
+      version = version.split('.').slice(0, MINOR_VERSION_INDEX).join('.');
       H5PIntegration.libraryDirectories[uberName] = `${main}-${version}`;
     }
 
@@ -188,7 +191,7 @@ export default class TextInput {
 
     const config = Util.extend(
       this.config,
-      { title: this.params.a11y.textInputTitle, text: this.textarea.innerHTML }
+      { title: this.params.a11y.textInputTitle, text: this.textarea.innerHTML },
     );
 
     if (!this.ckeditor) {
@@ -280,7 +283,7 @@ export default class TextInput {
       this.params.language,
       H5P.jQuery(this.dom),
       config.text ?? this.text ?? '',
-      Util.extend(this.config, config)
+      Util.extend(this.config, config),
     );
 
     return editor;

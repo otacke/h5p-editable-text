@@ -33,13 +33,13 @@ export default class XAPI {
         0, // Score maximum
         this,
         true, // Completed
-        true // Success
+        true, // Success
       );
     }
 
     Util.extend(
       xAPIEvent.getVerifiedStatementValue(['result']),
-      { response: this.main.getResponse() }
+      { response: this.main.getResponse() },
     );
 
     return xAPIEvent;
@@ -75,7 +75,7 @@ export default class XAPI {
   getTitle() {
     // H5P Core function: createTitle
     return H5P.createTitle(
-      this.extras?.metadata?.title || DEFAULT_DESCRIPTION
+      this.extras?.metadata?.title || DEFAULT_DESCRIPTION,
     );
   }
 

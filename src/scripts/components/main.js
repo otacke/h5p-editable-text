@@ -17,7 +17,7 @@ export default class Main {
     this.callbacks = Util.extend({
       onResized: () => {},
       onChanged: () => {},
-      onEdited: () => {}
+      onEdited: () => {},
     }, callbacks);
 
     this.dom = document.createElement('div');
@@ -50,8 +50,8 @@ export default class Main {
         backgroundColor: this.params.backgroundColor,
         isRoot: this.params.isRoot,
         a11y: {
-          textInputTitle: this.params.a11y.textInputTitle
-        }
+          textInputTitle: this.params.a11y.textInputTitle,
+        },
       },
       {
         onResized: () => {
@@ -63,8 +63,8 @@ export default class Main {
         },
         onEdited: () => {
           this.callbacks.onEdited();
-        }
-      }
+        },
+      },
     );
     this.dom.append(this.textInput.getDOM());
   }
@@ -92,7 +92,7 @@ export default class Main {
   getCurrentState() {
     return {
       text: this.textInput.getHTML(),
-      backgroundColor: this.textInput.getBackgroundColor()
+      backgroundColor: this.textInput.getBackgroundColor(),
     };
   }
 

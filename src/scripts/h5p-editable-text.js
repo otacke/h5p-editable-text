@@ -28,7 +28,7 @@ export default class EditableText extends H5P.EventDispatcher {
       placeholder: '',
       behaviour: {
         userCanEdit: true,
-        ckeditorIsOpenPermanently: false
+        ckeditorIsOpenPermanently: false,
       },
       l10n: {},
       a11y: {},
@@ -72,8 +72,8 @@ export default class EditableText extends H5P.EventDispatcher {
         },
         onEdited: () => {
           this.trigger('edited', { subContentId: this.subContentId, machineName: this.libraryInfo.machineName });
-        }
-      }
+        },
+      },
     );
   }
 
@@ -140,8 +140,8 @@ export default class EditableText extends H5P.EventDispatcher {
           if (params.activeElement) {
             params.activeElement.focus();
           }
-        }
-      }
+        },
+      },
     );
   }
 

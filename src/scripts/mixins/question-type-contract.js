@@ -30,7 +30,7 @@ export default class QuestionTypeContract {
     const xAPIEvent = this.createXAPIEvent('completed');
 
     return {
-      statement: xAPIEvent.data.statement
+      statement: xAPIEvent.data.statement,
     };
   }
 
@@ -46,7 +46,7 @@ export default class QuestionTypeContract {
     }
 
     return {
-      main: this.main.getCurrentState()
+      main: this.main.getCurrentState(),
     };
   }
 }
