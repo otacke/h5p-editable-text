@@ -149,7 +149,7 @@ export default class EditableText extends H5P.EventDispatcher {
    * Update component parameters and refresh the view.
    * @param {object[]} params Parameter objects to update.
    * @param {string} params[].name Name of the parameter to update.
-   * @param {*} params[].value New value for the parameter.
+   * @param {string|number|object|object[]} params[].value New value for the parameter.
    */
   updateParams(params) {
     params.forEach((param) => {
